@@ -1,0 +1,14 @@
+.TimeSlot {
+    width: 100%;
+    display: flex;
+    flex-direction: row;
+    align-items: flex-start;
+}
+
+.Dark {
+  background-color: #282c34;
+}
+
+.Light {
+  background-color:  #52565C;
+}
