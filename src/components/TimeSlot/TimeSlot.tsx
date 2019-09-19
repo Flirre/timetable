@@ -27,16 +27,23 @@ class TimeSlot extends Component<
       backgroundColor: busColor,
       display: 'block',
       textAlign: 'center',
-      minWidth: '75px',
-      alignSelf: 'flex-start'
+      minWidth: '6rem',
+      alignSelf: 'flex-start',
+      borderBottom: '1px solid black'
     };
 
     const busNameStyle: React.CSSProperties = {
       marginLeft: '8px',
       flexGrow: 1
     };
+
+    const departureTimeStyle: React.CSSProperties = {
+      marginRight: '16px',
+      paddingLeft: '16px'
+    };
+
     let secondDepartureElement = secondDeparture ? (
-      <p style={{ marginRight: '16px' }}>{secondDeparture}</p>
+      <p style={departureTimeStyle}>{secondDeparture}</p>
     ) : (
       <></>
     );
@@ -47,7 +54,7 @@ class TimeSlot extends Component<
           <p>{busNumber}</p>
         </div>
         <p style={busNameStyle}>{direction}</p>
-        <p style={{ marginRight: '16px' }}>{firstDeparture}</p>
+        <p style={departureTimeStyle}>{firstDeparture}</p>
         {secondDepartureElement}
       </div>
     );
