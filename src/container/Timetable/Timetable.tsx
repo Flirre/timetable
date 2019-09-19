@@ -5,6 +5,11 @@ import axios from 'axios';
 import { differenceInMinutes, format, parse } from 'date-fns';
 import authToken from '../../token';
 
+interface Departure {
+  [key: string]: any;
+  sname: string;
+}
+
 class Timetable extends Component {
   state = {
     departures: []
@@ -39,7 +44,7 @@ class Timetable extends Component {
       //TODO: make readable
       //TODO Sort by BusNr
       let allDeps: any[] = [];
-      DepartureBoard.Departure.forEach((departure: any) => {
+      DepartureBoard.Departure.forEach((departure: Departure) => {
         let existing = allDeps.filter((v, i) => {
           return (
             v.sname === departure.sname && v.direction === departure.direction
@@ -57,17 +62,32 @@ class Timetable extends Component {
           allDeps.push(departure);
         }
       });
-      this.setState({ departures: allDeps });
+
+      const sortedDepartures = [...allDeps].sort(this.sortDepartureLine);
+      this.setState({ departures: sortedDepartures });
     } catch (error) {
       console.log(error);
     }
+  }
+
+  sortDepartureLine(departureA: Departure, departureB: Departure) {
+    const depAName = departureA.sname;
+    const depBName = departureB.sname;
+
+    return depAName.localeCompare(depBName, undefined, {
+      numeric: true,
+      sensitivity: 'base'
+    });
+  }
+
+  calculateColor(index: number) {
+    return index % 2 === 0 ? 'Light' : 'Dark';
   }
 
   render() {
     return (
       <div className="Timetable">
         {this.state.departures.map((departure: any, index: number) => {
-          const color = index % 2 === 0 ? 'Light' : 'Dark';
           const timeNow = new Date();
           let firstDepartureTime;
           let secondDepartureTime: any;
@@ -105,7 +125,7 @@ class Timetable extends Component {
           return (
             <TimeSlot
               key={`${departure.direction}-${departure.time}-${departure.rtTime}`}
-              color={color}
+              color={this.calculateColor(index)}
               busColor={departure.fgColor}
               busNumber={departure.sname}
               direction={departure.direction}
